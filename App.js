@@ -1,12 +1,27 @@
-import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View } from 'react-native';
+import * as React from 'react';
+import { NavigationContainer } from '@react-navigation/native';
+import { createNativeStackNavigator } from '@react-navigation/native-stack';
+
+import { Button, Text, TextInput, View, StyleSheet, TouchableHighlight } from 'react-native';
+import Login from './Comp/login';
+import SplashScreen from './Comp/splashScreen ';
+
+const StackDemo = createNativeStackNavigator();
 
 export default function App() {
+  React.useEffect(() => {
+    setTimeout(() => { 
+        
+    }, 2000)
+  }, []);
+
   return (
-    <View style={styles.container}>
-      <Text>Open up App.js to start working on your app!</Text>
-      <StatusBar style="auto" />
-    </View>
+    <NavigationContainer>
+      <StackDemo.Navigator initialRouteName='SplashScreen'>
+        <StackDemo.Screen name='SplashScreen' component={SplashScreen} options={{ headerShown: false }} />
+        <StackDemo.Screen name='Login' component={Login} options={{ headerShown: false }} />
+      </StackDemo.Navigator>
+    </NavigationContainer>
   );
 }
 
