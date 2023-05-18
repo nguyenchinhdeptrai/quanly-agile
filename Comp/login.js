@@ -5,12 +5,32 @@ import { Feather } from '@expo/vector-icons';
 import { KeyboardAvoidingView } from 'react-native';
 
 const Login = (props) => {
+    //validate email
+    const [validateEmail, setValidateEmail] = useState('');
     //validate from
     const [password, setPassword] = useState('');
     const [user, setUser] = useState('');
     //show password
     const [show, setshow] = useState(false);
     const [visPass, setVisPass] = useState(true);
+    //check mail 
+    const checkMail = (userName) => {
+        console.log(userName);
+        let reg = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w\w+)+$/;
+        if (reg.test(userName) === '') {
+            // console.log(validateEmail)
+            return true;
+        } else if (reg.test(userName) === false) {
+            console.log(validateEmail)
+            setValidateEmail('')
+            return false;
+        }
+        else {
+            console.log(validateEmail)
+            setValidateEmail('')
+            return true;
+        }
+    }
     return (
         <View style={styles.container}>
             <View style={styles.view1}>
@@ -19,11 +39,18 @@ const Login = (props) => {
                 <View style={styles.viewTextinput}>
                     <TextInput placeholder="Email " style={styles.textinput} onChangeText={text => {
                         setUser(text);
-                        if (user.length < 3) {
-                            console.log('User nhỏ hơn 3 ký tự');
+                        const isValiMail = checkMail(text);
+                        // isValiMail ? setValidateEmail('') : setValidateEmail('Lỗi Email')
+                        if (isValiMail === true) {
+                            setValidateEmail('');
+                            // console.log(validateEmail)
+                        } else if (isValiMail === false) {
+                            setValidateEmail('Lỗi');
+                            console.log(validateEmail)
                         }
+
                     }} />
-                    {user.length != '' && user.length < 3 ? <Text style={styles.validateText}>Ít nhất 3 ký tự</Text> : ''}
+                    {validateEmail == 'Lỗi' && user != '' ? <Text style={styles.validateText}>Sai định dạng email</Text> : ''}
 
                 </View>
                 <View style={styles.viewTextinput}>
