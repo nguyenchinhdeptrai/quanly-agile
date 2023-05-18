@@ -19,6 +19,8 @@ const changepass = (props) => {
 
         </View>
 
+        
+
 
         <TextInput placeholder='Confirm Password' style={styles.textinput}></TextInput>
       </View>
