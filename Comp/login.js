@@ -33,6 +33,7 @@ const Login = (props) => {
                                 setPassword(text);
                                 if (password.length > 6) {
                                     console.log('Lỗi Pass');
+                                    
                                 }
                             }}
                             value={password}
