@@ -17,7 +17,7 @@ const Login = (props) => {
                 <Image source={{ uri: 'https://s3-alpha-sig.figma.com/img/d8f7/9177/0a9433e42748cb7f3bef6c1df9577f98?Expires=1685318400&Signature=GZpQAlL9VanPCSFQSojUWJtaT3-43VxQAdbSHJXIvczhBFjAHO3EynMswSPOgZh5Hv-M~bOoBBYPgBcnEHaZ~xQEwZUH8tIA3fkmtN1qoomkEwl~eINO8equJIWkwpg6ndemlJnkf5KQijEj-r9Q2NRYb9Fsq7R4uulifLEB4bblTi1JjoPWM76pCNRo2mnIJPVSlwhYdfIZvlEk8JposmfVlgCnrk-BR-gyBFnqgzpoo1rNcDBPypdLgsOf589Pp-ABME88Wc2eGUS4lz~Z9r-rop25IRhslaE1D1yYc3QMOh~K3i2MR5zf9rAvBbSyel30lwOUnhUYPUIMZenKnA__&Key-Pair-Id=APKAQ4GOSFWCVNEHN3O4' }}
                     style={styles.img} />
                 <View style={styles.viewTextinput}>
-                    <TextInput placeholder="Username " style={styles.textinput} onChangeText={text => {
+                    <TextInput placeholder="Email " style={styles.textinput} onChangeText={text => {
                         setUser(text);
                         if (user.length < 3) {
                             console.log('User nhỏ hơn 3 ký tự');
@@ -33,7 +33,6 @@ const Login = (props) => {
                                 setPassword(text);
                                 if (password.length > 6) {
                                     console.log('Lỗi Pass');
-                                    console.log('Hello');
                                 }
                             }}
                             value={password}
@@ -53,8 +52,8 @@ const Login = (props) => {
                     <Text style={styles.textLogin}>Đăng Nhập</Text>
                 </TouchableOpacity>
                 <View style={styles.viewRegister}>
-                    <Text onPress={() => props.navigation.navigate('SplashScreen')} style={styles.textRegister}>Quên mật khẩu</Text>
-                    <Text>Đăng Ký</Text>
+                    <Text onPress={() => props.navigation.navigate('Changepass')} style={styles.textRegister}>Quên mật khẩu</Text>
+                    <Text >Đăng Ký</Text>
                 </View>
             </View>
             <View style={styles.view2}>
