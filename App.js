@@ -5,6 +5,7 @@ import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { Button, Text, TextInput, View, StyleSheet, TouchableHighlight } from 'react-native';
 import Login from './Comp/login';
 import SplashScreen from './Comp/splashScreen ';
+import changepass from './Comp/changepass';
 
 const StackDemo = createNativeStackNavigator();
 
@@ -20,6 +21,7 @@ export default function App() {
       <StackDemo.Navigator initialRouteName='SplashScreen'>
         <StackDemo.Screen name='SplashScreen' component={SplashScreen} options={{ headerShown: false }} />
         <StackDemo.Screen name='Login' component={Login} options={{ headerShown: false }} />
+        <StackDemo.Screen name='changepass' component={changepass} options={{headerShown: false}} />
       </StackDemo.Navigator>
     </NavigationContainer>
   );
