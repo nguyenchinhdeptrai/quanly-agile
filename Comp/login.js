@@ -3,27 +3,93 @@ import React, { useState } from 'react'
 import { Icon } from 'react-native-elements';
 import { Feather } from '@expo/vector-icons';
 import { KeyboardAvoidingView } from 'react-native';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const Login = (props) => {
+    //validate email
+    const [validateEmail, setValidateEmail] = useState('');
     //validate from
     const [password, setPassword] = useState('');
     const [user, setUser] = useState('');
     //show password
     const [show, setshow] = useState(false);
     const [visPass, setVisPass] = useState(true);
+    //check mail 
+    const checkMail = (userName) => {
+        console.log(userName);
+        let reg = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w\w+)+$/;
+        if (reg.test(userName) === '') {
+            // console.log(validateEmail)
+            return true;
+        } else if (reg.test(userName) === false) {
+            console.log(validateEmail)
+            setValidateEmail('')
+            return false;
+        }
+        else {
+            console.log(validateEmail)
+            setValidateEmail('')
+            return true;
+        }
+    }
+    //login
+    const functionLogin = () => {
+        if (user.length == 0) {
+            alert("Chưa nhập username");
+            return;
+        }
+        if (password.length == 0) {
+            alert("Chưa Nhập Pass");
+            return;
+        }
+        let url_check = 'https://64662883228bd07b355d62c5.mockapi.io/account?email=' + user;
+        console.log(url_check);
+        fetch(url_check)
+            .then((res) => { return res.json(); })
+            .then(async (res_login) => {
+                console.log(res_login);
+                if (res_login.length != 1) {
+                    alert("Sai username hoặc lỗi trùng lặp data");
+                    console.log("Lỗi data");
+                    return;
+                }
+                else {
+                    // số lượng lấy được 1 bản ghi 
+                    let objU = res_login[0];
+                    if (objU.password != password) {
+                        alert("Sai password");
+                        return;
+                    } else {
+                        //đúng pass thì lưu vào asyn
+                        try {
+                            await AsyncStorage.setItem('loginInfo', JSON.stringify(objU))
+                            //chuyển màn hình
+                            props.navigation.navigate('Home')
+                        } catch (e) {
+                            console.log(e);
+                        }
+                    }
+                }
+            })
+    }
     return (
         <View style={styles.container}>
             <View style={styles.view1}>
                 <Image source={{ uri: 'https://s3-alpha-sig.figma.com/img/d8f7/9177/0a9433e42748cb7f3bef6c1df9577f98?Expires=1685318400&Signature=GZpQAlL9VanPCSFQSojUWJtaT3-43VxQAdbSHJXIvczhBFjAHO3EynMswSPOgZh5Hv-M~bOoBBYPgBcnEHaZ~xQEwZUH8tIA3fkmtN1qoomkEwl~eINO8equJIWkwpg6ndemlJnkf5KQijEj-r9Q2NRYb9Fsq7R4uulifLEB4bblTi1JjoPWM76pCNRo2mnIJPVSlwhYdfIZvlEk8JposmfVlgCnrk-BR-gyBFnqgzpoo1rNcDBPypdLgsOf589Pp-ABME88Wc2eGUS4lz~Z9r-rop25IRhslaE1D1yYc3QMOh~K3i2MR5zf9rAvBbSyel30lwOUnhUYPUIMZenKnA__&Key-Pair-Id=APKAQ4GOSFWCVNEHN3O4' }}
                     style={styles.img} />
                 <View style={styles.viewTextinput}>
-                    <TextInput placeholder="Username " style={styles.textinput} onChangeText={text => {
+                    <TextInput placeholder="Email " style={styles.textinput} onChangeText={text => {
                         setUser(text);
-                        if (user.length < 3) {
-                            console.log('User nhỏ hơn 3 ký tự');
+                        const isValiMail = checkMail(text);
+                        if (isValiMail === true) {
+                            setValidateEmail('');
+                        } else if (isValiMail === false) {
+                            setValidateEmail('Lỗi');
+                            console.log(validateEmail)
                         }
+
                     }} />
-                    {user.length != '' && user.length < 3 ? <Text style={styles.validateText}>Ít nhất 3 ký tự</Text> : ''}
+                    {validateEmail == 'Lỗi' && user != '' ? <Text style={styles.validateText}>Sai định dạng email</Text> : ''}
 
                 </View>
                 <View style={styles.viewTextinput}>
@@ -33,7 +99,6 @@ const Login = (props) => {
                                 setPassword(text);
                                 if (password.length > 6) {
                                     console.log('Lỗi Pass');
-                                    
                                 }
                             }}
                             value={password}
@@ -49,12 +114,12 @@ const Login = (props) => {
                     {password.length != '' && password.length < 6 ? <Text style={styles.validateText}>Ít nhất 6 ký tự</Text> : ''}
                 </View>
 
-                <TouchableOpacity style={styles.btnLogin}>
+                <TouchableOpacity style={styles.btnLogin} onPress={functionLogin}>
                     <Text style={styles.textLogin}>Đăng Nhập</Text>
                 </TouchableOpacity>
                 <View style={styles.viewRegister}>
-                    <Text onPress={() => props.navigation.navigate('SplashScreen')} style={styles.textRegister}>Quên mật khẩu</Text>
-                    <Text>Đăng Ký</Text>
+                    <Text onPress={() => props.navigation.navigate('Changepass')} style={styles.textRegister}>Quên mật khẩu</Text>
+                    <Text onPress={() => props.navigation.navigate('Register')} >Đăng Ký</Text>
                 </View>
             </View>
             <View style={styles.view2}>
