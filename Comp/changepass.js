@@ -104,7 +104,7 @@ const Changepass = (props) => {
       </View>
       <View style={styles.view2}>
         <TouchableOpacity style={styles.btnLogin}>
-          <Text style={styles.textLogin}>Đăng Nhập</Text>
+          <Text style={styles.textLogin}>Đổi mật khẩu</Text>
         </TouchableOpacity>
         <Text
           onPress={() => props.navigation.navigate('Login')}
@@ -165,5 +165,7 @@ const styles = StyleSheet.create({
   textBacklogin: {
     marginTop: 12,
     color: 'gray',
+  },textLogin:{
+    color: 'white',
   }
 })

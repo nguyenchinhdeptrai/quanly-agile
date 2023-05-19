@@ -3,6 +3,7 @@ import React, { useState } from 'react'
 import { Icon } from 'react-native-elements';
 import { Feather } from '@expo/vector-icons';
 import { KeyboardAvoidingView } from 'react-native';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const Login = (props) => {
     //validate email
@@ -31,6 +32,46 @@ const Login = (props) => {
             return true;
         }
     }
+    //login
+    const functionLogin = () => {
+        if (user.length == 0) {
+            alert("Chưa nhập username");
+            return;
+        }
+        if (password.length == 0) {
+            alert("Chưa Nhập Pass");
+            return;
+        }
+        let url_check = 'https://64662883228bd07b355d62c5.mockapi.io/account?email=' + user;
+        console.log(url_check);
+        fetch(url_check)
+            .then((res) => { return res.json(); })
+            .then(async (res_login) => {
+                console.log(res_login);
+                if (res_login.length != 1) {
+                    alert("Sai username hoặc lỗi trùng lặp data");
+                    console.log("Lỗi data");
+                    return;
+                }
+                else {
+                    // số lượng lấy được 1 bản ghi 
+                    let objU = res_login[0];
+                    if (objU.password != password) {
+                        alert("Sai password");
+                        return;
+                    } else {
+                        //đúng pass thì lưu vào asyn
+                        try {
+                            await AsyncStorage.setItem('loginInfo', JSON.stringify(objU))
+                            //chuyển màn hình
+                            props.navigation.navigate('Home')
+                        } catch (e) {
+                            console.log(e);
+                        }
+                    }
+                }
+            })
+    }
     return (
         <View style={styles.container}>
             <View style={styles.view1}>
@@ -40,10 +81,8 @@ const Login = (props) => {
                     <TextInput placeholder="Email " style={styles.textinput} onChangeText={text => {
                         setUser(text);
                         const isValiMail = checkMail(text);
-                        // isValiMail ? setValidateEmail('') : setValidateEmail('Lỗi Email')
                         if (isValiMail === true) {
                             setValidateEmail('');
-                            // console.log(validateEmail)
                         } else if (isValiMail === false) {
                             setValidateEmail('Lỗi');
                             console.log(validateEmail)
@@ -75,12 +114,12 @@ const Login = (props) => {
                     {password.length != '' && password.length < 6 ? <Text style={styles.validateText}>Ít nhất 6 ký tự</Text> : ''}
                 </View>
 
-                <TouchableOpacity style={styles.btnLogin}>
+                <TouchableOpacity style={styles.btnLogin} onPress={functionLogin}>
                     <Text style={styles.textLogin}>Đăng Nhập</Text>
                 </TouchableOpacity>
                 <View style={styles.viewRegister}>
                     <Text onPress={() => props.navigation.navigate('Changepass')} style={styles.textRegister}>Quên mật khẩu</Text>
-                    <Text >Đăng Ký</Text>
+                    <Text onPress={() => props.navigation.navigate('Register')} >Đăng Ký</Text>
                 </View>
             </View>
             <View style={styles.view2}>
