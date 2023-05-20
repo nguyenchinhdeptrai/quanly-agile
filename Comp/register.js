@@ -5,6 +5,7 @@ import { Feather } from '@expo/vector-icons';
 const Register = (props) => {
   //validate email
   const [validateEmail, setValidateEmail] = useState('');
+  const [validatePassword, setValidatePassword] = useState('');
   //validate password
   const [password, setPassword] = useState('');
   //validate password2
@@ -23,22 +24,42 @@ const Register = (props) => {
   const checkMail = (userName) => {
     console.log(userName);
     let reg = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w\w+)+$/;
-    if (reg.test(userName) === '') {
-      // console.log(validateEmail)
-      return true;
-    } else if (reg.test(userName) === false) {
-      console.log(validateEmail)
-      setValidateEmail('')
+    if (reg.test(userName) === false) {
+      console.log(validateEmail + ' test');
       return false;
     }
     else {
-      console.log(validateEmail)
-      setValidateEmail('')
+      console.log(validateEmail + ' test1 ');
       return true;
     }
   }
+  const checkPassword = (password2) => {
+    const passwordRegex = /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])/;
+    return passwordRegex.test(password2);
+  };
+
   // function register
   const functionRegister = () => {
+    if (user.length == 0) {
+      alert("Chưa nhập username");
+      return;
+    }
+    if (fullname.length == 0) {
+      alert("Chưa nhập fullname");
+      return;
+    }
+    if (password2.length == 0) {
+      alert("Chưa nhập password");
+      return;
+    }
+    if (validateEmail == 'Lỗi') {
+      alert('Mail lỗi');
+      return
+    }
+    if (password != password2) {
+      alert('2 mật khẩu không trùng khớp ');
+      return
+    }
     let objUser = { email: user, password: password, name: fullname, image: 'chua co', status: 1 }
     fetch(url, {
       method: 'POST',// POST: Thêm, PUT: Sửa, DELETE: xóa
@@ -51,7 +72,7 @@ const Register = (props) => {
       console.log(res);
       if (res.status == 201)
         alert("Đăng ký thành công");
-        props.navigation.navigate('Login');
+      props.navigation.navigate('Login');
     }).catch((err) => { console.log(err); });
   }
   return (
@@ -66,7 +87,6 @@ const Register = (props) => {
             setValidateEmail('');
           } else if (isValiMail === false) {
             setValidateEmail('Lỗi');
-            console.log(validateEmail)
           }
 
         }} />
@@ -74,15 +94,19 @@ const Register = (props) => {
 
       </View>
       <View style={styles.viewTextinput}>
-        <TextInput placeholder="Full namne " style={styles.textinput} onChangeText={(text) => setFullname(text)} />
+        <TextInput placeholder="Full name " style={styles.textinput} onChangeText={(text) => setFullname(text)} />
       </View>
       <View style={styles.viewTextinput}>
         <View style={{ flexDirection: 'row' }}>
           <TextInput placeholder="Password " style={styles.textinput}
             onChangeText={text => {
               setPassword(text);
-              if (password.length > 6) {
-                console.log('Lỗi Pass');
+              const isValiPass = checkPassword(text);
+              console.log(isValiPass + ' check password');
+              if (isValiPass === true) {
+                setValidatePassword('');
+              } else if (isValiPass === false) {
+                setValidatePassword('error password');
               }
             }}
             value={password}
@@ -96,6 +120,7 @@ const Register = (props) => {
           </TouchableOpacity>
         </View>
         {password.length != '' && password.length < 6 ? <Text style={styles.validateText}>Ít nhất 6 ký tự</Text> : ''}
+        {validatePassword == 'error password' && password != '' ? <Text style={styles.validateText}>Mật khẩu không hợp lệ</Text> : ''}
       </View>
       <View style={styles.viewTextinput}>
         <View style={{ flexDirection: 'row' }}>
