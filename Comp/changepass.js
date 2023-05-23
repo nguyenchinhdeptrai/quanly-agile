@@ -126,12 +126,11 @@ const styles = StyleSheet.create({
     alignItems: 'center'
   },
   view1: {
-    flex: 4,
     flexDirection: 'column',
     alignItems: 'center'
   },
   view2: {
-    flex: 1,
+    marginTop: 120,
     flexDirection: 'column',
     alignItems: 'center'
   },
@@ -165,7 +164,7 @@ const styles = StyleSheet.create({
   textBacklogin: {
     marginTop: 12,
     color: 'gray',
-  },textLogin:{
+  }, textLogin: {
     color: 'white',
   }
 })
