@@ -152,12 +152,11 @@ const styles = StyleSheet.create({
     },
 
     view1: {
-        flex: 4,
         flexDirection: 'column',
         alignItems: 'center'
     },
     view2: {
-        flex: 1,
+        marginTop:120,
         flexDirection: 'column',
         alignItems: 'center'
     },
