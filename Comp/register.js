@@ -120,7 +120,7 @@ const Register = (props) => {
           </TouchableOpacity>
         </View>
         {password.length != '' && password.length < 6 ? <Text style={styles.validateText}>Ít nhất 6 ký tự</Text> : ''}
-        {validatePassword == 'error password' && password != '' ? <Text style={styles.validateText}>Mật khẩu không hợp lệ</Text> : ''}
+        {validatePassword == 'error password' && password != '' ? <Text style={styles.validateText}>Mật khẩu bao gồm cả số, chữ cái in hoa và{'\n'}không chứa ký tự đặc biệt</Text> : ''}
       </View>
       <View style={styles.viewTextinput}>
         <View style={{ flexDirection: 'row' }}>
