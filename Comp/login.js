@@ -8,38 +8,45 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 const Login = (props) => {
     //validate email
     const [validateEmail, setValidateEmail] = useState('');
-    //validate from
+    const [validatePassword, setValidatePassword] = useState('');
+    //validate password
     const [password, setPassword] = useState('');
+    //validate password2
+    const [password2, setPassword2] = useState('');
     const [user, setUser] = useState('');
+    const [fullname, setFullname] = useState('');
     //show password
     const [show, setshow] = useState(false);
     const [visPass, setVisPass] = useState(true);
-    //check mail 
+    //show password2
+    const [show2, setshow2] = useState(false);
+    const [visPass2, setVisPass2] = useState(true);
+    //url 
+    //validate email
     const checkMail = (userName) => {
         console.log(userName);
         let reg = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w\w+)+$/;
-        if (reg.test(userName) === '') {
-            // console.log(validateEmail)
-            return true;
-        } else if (reg.test(userName) === false) {
-            console.log(validateEmail)
-            setValidateEmail('')
+        if (reg.test(userName) === false) {
+            console.log(validateEmail + ' test');
             return false;
         }
         else {
-            console.log(validateEmail)
-            setValidateEmail('')
+            console.log(validateEmail + ' test1 ');
             return true;
         }
     }
+    const checkPassword = (password2) => {
+        const passwordRegex = /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])/;
+        return passwordRegex.test(password2);
+    };
     //login
     const functionLogin = () => {
         if (user.length == 0) {
-            alert("Chưa nhập username");
+            alert("Chưa nhập email");
             return;
         }
         if (password.length == 0) {
-            alert("Chưa Nhập Pass");
+            alert("Chưa nhập password");
             return;
         }
         let url_check = 'https://64662883228bd07b355d62c5.mockapi.io/account?email=' + user;
@@ -49,7 +56,7 @@ const Login = (props) => {
             .then(async (res_login) => {
                 console.log(res_login);
                 if (res_login.length != 1) {
-                    alert("Sai username hoặc lỗi trùng lặp data");
+                    alert("Tài khoản hoặc mật khẩu không chính xác");
                     console.log("Lỗi data");
                     return;
                 }
@@ -57,7 +64,7 @@ const Login = (props) => {
                     // số lượng lấy được 1 bản ghi 
                     let objU = res_login[0];
                     if (objU.password != password) {
-                        alert("Sai password");
+                        alert("Tài khoản hoặc mật khẩu không chính xác");
                         return;
                     } else {
                         //đúng pass thì lưu vào asyn
@@ -89,16 +96,18 @@ const Login = (props) => {
                         }
 
                     }} />
-                    {validateEmail == 'Lỗi' && user != '' ? <Text style={styles.validateText}>Sai định dạng email</Text> : ''}
-
                 </View>
                 <View style={styles.viewTextinput}>
                     <View style={{ flexDirection: 'row' }}>
                         <TextInput placeholder="Password " style={styles.textinput}
                             onChangeText={text => {
                                 setPassword(text);
-                                if (password.length > 6) {
-                                    console.log('Lỗi Pass');
+                                const isValiPass = checkPassword(text);
+                                console.log(isValiPass + ' check password');
+                                if (isValiPass === true) {
+                                    setValidatePassword('');
+                                } else if (isValiPass === false) {
+                                    setValidatePassword('error password');
                                 }
                             }}
                             value={password}
@@ -111,7 +120,6 @@ const Login = (props) => {
                             <Feather name={show === false ? "eye-off" : "eye"} size={24} color="black" style={{ marginLeft: -32, marginTop: 8 }} />
                         </TouchableOpacity>
                     </View>
-                    {password.length != '' && password.length < 6 ? <Text style={styles.validateText}>Ít nhất 6 ký tự</Text> : ''}
                 </View>
 
                 <TouchableOpacity style={styles.btnLogin} onPress={functionLogin}>
@@ -156,7 +164,7 @@ const styles = StyleSheet.create({
         alignItems: 'center'
     },
     view2: {
-        marginTop:120,
+        marginTop: 120,
         flexDirection: 'column',
         alignItems: 'center'
     },
