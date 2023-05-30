@@ -1,4 +1,4 @@
-import { StyleSheet, Text, View, TextInput, Image, Dimensions, TouchableOpacity, ScrollView } from 'react-native'
+import { StyleSheet, Text, View, TextInput, Image, Dimensions, TouchableOpacity, ScrollView, BackHandler ,Alert } from 'react-native'
 import React, { useState } from 'react';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import AsyncStorage from '@react-native-async-storage/async-storage';
@@ -38,9 +38,33 @@ const Home = (props) => {
     });
 
     return () => {
-      unsubscribe;
+      unsubscribe();
     };
   }, [props.navigation]);
+
+  React.useEffect(() => {
+    const backAction = () => {
+      Alert.alert(
+        'Đóng ứng dụng',
+        'Bạn có chắc chắn muốn đóng ứng dụng?',
+        [
+          {
+            text: 'Hủy',
+            onPress: () => null,
+          },
+          { text: 'Đồng ý', onPress: () => BackHandler.exitApp() },
+        ],
+
+      );
+
+      return true; // Trả về true nếu bạn đã xử lý sự kiện, ngược lại trả về false
+    };
+
+    const backHandler = BackHandler.addEventListener('hardwareBackPress', backAction);
+
+    return () => backHandler.remove();
+  }, []);
+
   //style screen home
   const styles = StyleSheet.create({
     container: {
@@ -86,26 +110,29 @@ const Home = (props) => {
       height: 180,
     },
     iconShopping: {
-      marginHorizontal: 5,
+      marginLeft: 7,
     },
     iconSearch: {
       paddingTop: 7,
       marginHorizontal: 5,
     }
   });
+
+
+
   //function home
   const FunctionHome = () => {
     return (
       <View style={styles.container}>
 
         <View style={styles.viewHeader}>
-          <TouchableOpacity>
-            <Icon name="shopping-cart" size={35} color="#000" style={styles.iconShopping} />
-          </TouchableOpacity>
           <View style={styles.viewSearch}>
             <Icon name="search" size={25} color="#000" style={styles.iconSearch} />
             <TextInput placeholder='Tìm kiếm' style={styles.textInput} />
           </View>
+          <TouchableOpacity>
+            <Icon name="shopping-cart" size={35} color="#000" style={styles.iconShopping} />
+          </TouchableOpacity>
         </View>
         <View style={styles.view2}>
           <Image source={require('../../assets/z4382220027948_595c4d1067d947765fa3f80f3948ef30.jpg')} style={styles.styleImage} />
@@ -148,7 +175,7 @@ const Home = (props) => {
   return (
     <View style={{ flex: 1 }}>
       <Tab.Navigator>
-        <Tab.Screen name="Home" component={FunctionHome} options={{ headerShown: false }} />
+        <Tab.Screen name="HomeScreen" component={FunctionHome} options={{ headerShown: false }} />
         <Tab.Screen name="Notification" component={Notification} options={{ headerShown: false }} />
         <Tab.Screen name="Profile" component={Profile} options={{ headerShown: false }} />
 
