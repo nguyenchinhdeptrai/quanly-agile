@@ -2,14 +2,17 @@ import { StyleSheet, Text, View, Image, TouchableOpacity, Dimensions } from 'rea
 import React from 'react'
 import Icon from 'react-native-vector-icons/FontAwesome';
 
-const ItemProduct = () => {
+const ItemProduct = ({ item, name, openModal, price, size }) => {
     return (
+
         <View style={styles.container}>
-            <Image source={require('../../assets/polo.png')} style={styles.img} />
-            <Text style={styles.titleProduct}>Men polo shirt</Text>
+            <TouchableOpacity onPress={openModal}>
+                <Image source={require('../../assets/polo.png')} style={styles.img} />
+            </TouchableOpacity>
+            <Text style={styles.titleProduct}>{name}</Text>
             <View style={styles.viewTitleProduct}>
-                <Text>$12900</Text>
-                <Text>Size:M</Text>
+                <Text>${price}</Text>
+                <Text>Size:{size}</Text>
             </View>
             <View style={styles.viewButtonProduct}>
                 <TouchableOpacity style={styles.button}>
@@ -32,7 +35,8 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         borderRadius: 10,
         padding: 10,
-        marginRight:15
+        marginRight: 15,
+        marginBottom:10,
     },
     viewTitleProduct: {
         flexDirection: 'column',
