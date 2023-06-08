@@ -36,11 +36,11 @@ const Login = (props) => {
     //login
     const functionLogin = () => {
         if (user.length == 0) {
-            alert("Chưa nhập email");
+            alert("Bạn phải nhập tài khoản và mật khẩu");
             return;
         }
         if (password.length == 0) {
-            alert("Chưa nhập password");
+            alert("Bạn phải nhập tài khoản và mật khẩu");
             return;
         }
         let url_check = 'https://64662883228bd07b355d62c5.mockapi.io/account?email=' + user;

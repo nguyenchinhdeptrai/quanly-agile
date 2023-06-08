@@ -5,7 +5,7 @@ const SplashScreen = ({ navigation }) => {
   React.useEffect(() => {
     setTimeout(() => {
       navigation.navigate('Login');
-    }, 2000)
+    }, 2500)
   })
   return (
     <View style={styles.view}>
@@ -25,7 +25,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
   }, img: {
-    width: '100%',
-    height: '45%',
+    width: 300,
+    height: 320,
   }
 })

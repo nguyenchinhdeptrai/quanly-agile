@@ -1,12 +1,14 @@
 import { StyleSheet, Text, View, TextInput, Image, Dimensions, TouchableOpacity, ScrollView, BackHandler, Alert, Modal, RefreshControl } from 'react-native'
 import React, { useState } from 'react';
 import Icon from 'react-native-vector-icons/FontAwesome';
+import { Ionicons } from 'react-native-vector-icons';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import ItemProduct from '../ItemProduct/itemProduct';
 import Notification from './notification';
 import Profile from './profile';
-import ShowProduct from '../ItemProduct/ShowProduct';
-
+import MyModal from '../ItemProduct/ModalShowProduct';
+import ModalAddProduct from '../ItemProduct/ModalAddProduct';
+import ModalShoppingCart from '../ItemProduct/ModalShoppingCart';
 //
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 const Tab = createBottomTabNavigator();
@@ -144,23 +146,38 @@ const Home = (props) => {
       paddingTop: 7,
       marginHorizontal: 5,
     },
-    buttonClosedModal: {
-      justifyContent: 'center',
-      alignItems: 'center',
-    },
-    circle: {
+    floatingButton: {
+      position: 'absolute',
+      bottom: 20,
+      right: 20,
       width: 50,
       height: 50,
-      borderRadius: 40,
-      backgroundColor: 'gray',
-      justifyContent: 'center',
+      borderRadius: 25,
+      backgroundColor: 'white',
       alignItems: 'center',
+      justifyContent: 'center',
+    },
+    buttonText: {
+      color: 'lightblue',
+      fontSize: 24,
+      fontWeight: 'bold',
     },
   });
 
   const [showModalViewAll, setshowModalViewAll] = useState(false);
   const openModalViewAll = () => {
     setshowModalViewAll(true);
+  }
+
+  //modal add propduct
+  const [showModalAddProduct, setShowModalAddProduct] = useState(false);
+  const openAddProduct = () => {
+    setShowModalAddProduct(true);
+  }
+  //modal shopping cart 
+  const [showModalShoppingCart, setshowModalShoppingCart] = useState(false);
+  const openShoppingCart = () => {
+    setshowModalShoppingCart(true);
   }
   //item list new 
   const [showModal, setShowModal] = useState(false);
@@ -173,6 +190,7 @@ const Home = (props) => {
       setshowModalViewAll(false);
     }
   }
+
 
   //function 
   const splitArrayIntoChunks = (arr, chunkSize) => {
@@ -194,7 +212,7 @@ const Home = (props) => {
             <Icon name="search" size={25} color="#000" style={styles.iconSearch} />
             <TextInput placeholder='Tìm kiếm' style={styles.textInput} />
           </View>
-          <TouchableOpacity>
+          <TouchableOpacity onPress={openShoppingCart}>
             <Icon name="shopping-cart" size={35} color="#000" style={styles.iconShopping} />
           </TouchableOpacity>
         </View>
@@ -229,32 +247,12 @@ const Home = (props) => {
                 })}
               </ScrollView>
               {/* modal show product */}
-              <Modal visible={showModal}
-                transparent={false}
-                animationType='slide'
-                onRequestClose={
-                  () => {
-                    //xay ra khi bấm nút back trên đt
-                    setShowModal(false);
-                  }
-                }>
-                <View style={{ flex: 1 }}>
-                  <View style={{ flex: 5 }} >
-                    <ShowProduct nav={selectedItem} />
-                  </View>
-                  <View style={{ flex: 1 }}>
-                    <TouchableOpacity onPress={() => setShowModal(false)}>
-                      <View style={styles.buttonClosedModal}>
-                        <View style={styles.circle}>
-                          <Icon name="times" size={20} color="white" />
-                        </View>
-                      </View>
-                    </TouchableOpacity>
-                  </View>
+              <MyModal
+                showModal={showModal}
+                setShowModal={setShowModal}
+                selectedItem={selectedItem}
+              />
 
-                </View>
-
-              </Modal>
               {/* modal show viewAll */}
               <Modal
                 visible={showModalViewAll}
@@ -268,7 +266,7 @@ const Home = (props) => {
                     <TouchableOpacity onPress={() => setshowModalViewAll(false)}>
                       <Icon name="arrow-left" size={24} color="#000" />
                     </TouchableOpacity>
-                    <View style={{ alignItems: 'center', width: screenWidth - 80 }}>
+                    <View style={{ alignItems: 'center', width: screenWidth - 30 }}>
                       <Text style={{ fontSize: 20, fontWeight: 'bold' }}>Danh Sách Sản Phẩm</Text>
                     </View>
 
@@ -317,17 +315,58 @@ const Home = (props) => {
 
           </View>
         </ScrollView>
+
+        <TouchableOpacity style={styles.floatingButton} onPress={openAddProduct}>
+          <Text style={styles.buttonText}>+</Text>
+        </TouchableOpacity>
+        {/* modal add product for administration */}
+        <ModalAddProduct
+          showModalAddProduct={showModalAddProduct}
+          setShowModalAddProduct={setShowModalAddProduct}
+        />
+        {/* modal add product for administration */}
+        <ModalShoppingCart
+          showModalShoppingCart={showModalShoppingCart}
+          setshowModalShoppingCart={setshowModalShoppingCart}
+        />
       </View>
     );
   };
+
   //tab navigation
   return (
     <View style={{ flex: 1 }}>
       <Tab.Navigator>
-        <Tab.Screen name="HomeScreen" component={FunctionHome} options={{ headerShown: false }} />
-        <Tab.Screen name="Notification" component={Notification} options={{ headerShown: false }} />
-        <Tab.Screen name="Profile" component={Profile} options={{ headerShown: false }} />
-
+        <Tab.Screen
+          name="HomeScreen"
+          component={FunctionHome}
+          options={{
+            tabBarIcon: ({ color, size }) => (
+              <Ionicons name="home" size={size} color={color} />
+            ),
+            headerShown: false,
+          }}
+        />
+        <Tab.Screen
+          name="Notification"
+          component={Notification}
+          options={{
+            tabBarIcon: ({ color, size }) => (
+              <Ionicons name="notifications" size={size} color={color} />
+            ),
+            headerShown: false,
+          }}
+        />
+        <Tab.Screen
+          name="Profile"
+          component={Profile}
+          options={{
+            tabBarIcon: ({ color, size }) => (
+              <Ionicons name="person" size={size} color={color} />
+            ),
+            headerShown: false,
+          }}
+        />
       </Tab.Navigator>
     </View>
   )

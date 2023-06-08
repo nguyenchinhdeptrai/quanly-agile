@@ -41,15 +41,15 @@ const Register = (props) => {
   // function register
   const functionRegister = () => {
     if (user.length == 0) {
-      alert("Chưa nhập username");
+      alert("Chưa nhập đầy đủ thông tin");
       return;
     }
     if (fullname.length == 0) {
-      alert("Chưa nhập fullname");
+      alert("Chưa nhập đầy đủ thông tin");
       return;
     }
     if (password2.length == 0) {
-      alert("Chưa nhập password");
+      alert("Chưa nhập đầy đủ thông tin");
       return;
     }
     if (validateEmail == 'Lỗi') {
