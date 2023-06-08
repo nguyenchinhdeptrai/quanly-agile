@@ -11,15 +11,10 @@ const Login = (props) => {
     //validate password
     const [password, setPassword] = useState('');
     //validate password2
-    const [password2, setPassword2] = useState('');
     const [user, setUser] = useState('');
-    const [fullname, setFullname] = useState('');
     //show password
     const [show, setshow] = useState(false);
     const [visPass, setVisPass] = useState(true);
-    //show password2
-    const [show2, setshow2] = useState(false);
-    const [visPass2, setVisPass2] = useState(true);
     //url 
     //validate email
     const checkMail = (userName) => {
