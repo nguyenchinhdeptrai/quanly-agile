@@ -1,55 +1,18 @@
-import { StyleSheet, Text, View, Modal, TouchableOpacity, ScrollView } from 'react-native'
-import React, { useState } from 'react'
+import { StyleSheet, Text, View, Modal, TouchableOpacity, FlatList } from 'react-native'
+import React from 'react'
 import Icon from 'react-native-vector-icons/FontAwesome';
-import ItemProduct from './itemProduct';
-const ModalShoppingCart = ({ showModalShoppingCart, setshowModalShoppingCart }) => {
-  const [ds, setds] = useState([]);
-  const GetListProduct = async () => {
 
-    let uri_api = "https://64662883228bd07b355d62c5.mockapi.io/product";
-    try {
-      const response = await fetch(
-        uri_api,
-      );
-      const json = await response.json();
-      setds(json)
-    } catch (error) {
-      console.error(error);
-    }
-  }
+const ModalShoppingCart = ({ showModalShoppingCart, setshowModalShoppingCart }) => {
   return (
-    <Modal visible={showModalShoppingCart}
+    <Modal
+      visible={showModalShoppingCart}
       transparent={false}
       animationType='slide'
-      onRequestClose={
-        () => {
-          //xay ra khi bấm nút back trên đt
-          setshowModalShoppingCart(false);
-        }
-      }>
+      onRequestClose={() => {
+        setshowModalShoppingCart(false);
+      }}
+    >
       <View style={{ flex: 1 }}>
-        <View>
-          <Text>This is a modal add product</Text>
-        </View>
-        {/* list favortite */}
-        <View style={{ height: 300 }}>
-          <ScrollView>
-            {ds.slice(0, 5).map((item, index) => {
-              return (
-                <ItemProduct
-                  key={index}
-                  name={item.name}
-                  price={item.price}
-                  image={item.image}
-                  size={item.size}
-                  type={item.type}
-                  id={item.id}
-                  openModal={() => openModal(item)}
-                />
-              );
-            })}
-          </ScrollView>
-        </View>
         <TouchableOpacity onPress={() => setshowModalShoppingCart(false)}>
           <View style={styles.buttonClosedModal}>
             <View style={styles.circle}>
@@ -58,13 +21,11 @@ const ModalShoppingCart = ({ showModalShoppingCart, setshowModalShoppingCart }) 
           </View>
         </TouchableOpacity>
       </View>
-
-
     </Modal>
-  )
+  );
 }
 
-export default ModalShoppingCart
+export default ModalShoppingCart;
 
 const styles = StyleSheet.create({
   circle: {
@@ -79,4 +40,4 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
   },
-})
+});
