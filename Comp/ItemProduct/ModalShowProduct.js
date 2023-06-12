@@ -1,51 +1,58 @@
-import { StyleSheet, Text, View, Modal, TouchableOpacity } from 'react-native'
-import React from 'react'
-import ShowProduct from './ShowProduct'
+import React, { useState, useEffect } from 'react';
+import { StyleSheet, Text, View, Modal, TouchableOpacity } from 'react-native';
+import ShowProduct from './ShowProduct';
 import Icon from 'react-native-vector-icons/FontAwesome';
-const MyModal = ({ showModal, setShowModal, selectedItem }) => {
-    return (
-        <Modal visible={showModal}
-            transparent={false}
-            animationType='slide'
-            onRequestClose={
-                () => {
-                    //xay ra khi bấm nút back trên đt
-                    setShowModal(false);
-                }
-            }>
-            <View style={{ flex: 1 }}>
-                <View style={{ flex: 5 }} >
-                    <ShowProduct nav={selectedItem} />
-                </View>
-                <View style={{ flex: 1 }}>
-                    <TouchableOpacity onPress={() => setShowModal(false)}>
-                        <View style={styles.buttonClosedModal}>
-                            <View style={styles.circle}>
-                                <Icon name="times" size={20} color="white" />
-                            </View>
-                        </View>
-                    </TouchableOpacity>
-                </View>
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
+const MyModal = ({ showModal, setShowModal, selectedItem, status }) => {
+
+
+  return (
+    <Modal
+      visible={showModal}
+      transparent={false}
+      animationType='slide'
+      onRequestClose={() => {
+        setShowModal(false);
+      }}
+    >
+      <View style={styles.container}>
+        <View style={styles.contentContainer}>
+          <ShowProduct nav={selectedItem} status={status}/>
+        </View>
+
+        <View style={styles.closeButtonContainer}>
+          <TouchableOpacity onPress={() => setShowModal(false)}>
+            <View style={styles.circle}>
+              <Icon name="times" size={20} color="white" />
             </View>
+          </TouchableOpacity>
+        </View>
+      </View>
+    </Modal>
+  );
+};
 
-        </Modal>
-    )
-}
-
-export default MyModal
+export default MyModal;
 
 const styles = StyleSheet.create({
-    circle: {
-        width: 50,
-        height: 50,
-        borderRadius: 40,
-        backgroundColor: 'gray',
-        justifyContent: 'center',
-        alignItems: 'center',
-    },
-    buttonClosedModal: {
-        justifyContent: 'center',
-        alignItems: 'center',
-    },
-})
+  container: {
+    flex: 1,
+  },
+  contentContainer: {
+    flex: 5,
+  },
+  closeButtonContainer: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  circle: {
+    width: 50,
+    height: 50,
+    borderRadius: 40,
+    backgroundColor: 'gray',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+});

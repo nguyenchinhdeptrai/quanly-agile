@@ -200,8 +200,6 @@ const Home = (props) => {
     }
     return chunks;
   }
-
-
   //function home
   const FunctionHome = () => {
     return (
@@ -241,7 +239,10 @@ const Home = (props) => {
                       price={item.price}
                       image={item.image}
                       size={item.size}
+                      type={item.type}
+                      id={item.id}
                       openModal={() => openModal(item)}
+                      status={loginInfo.status}
                     />
                   );
                 })}
@@ -251,6 +252,7 @@ const Home = (props) => {
                 showModal={showModal}
                 setShowModal={setShowModal}
                 selectedItem={selectedItem}
+                status={loginInfo.status}
               />
 
               {/* modal show viewAll */}
@@ -287,6 +289,8 @@ const Home = (props) => {
                               price={item.price}
                               image={item.image}
                               size={item.size}
+                              type={item.type}
+                              id={item.id}
                               openModal={() => openModal(item)}
                             />
                           ))}
