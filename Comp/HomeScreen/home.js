@@ -9,6 +9,7 @@ import Profile from './profile';
 import MyModal from '../ItemProduct/ModalShowProduct';
 import ModalAddProduct from '../ItemProduct/ModalAddProduct';
 import ModalShoppingCart from '../ItemProduct/ModalShoppingCart';
+import ModalSearch from '../ItemProduct/ModalSearch';
 //
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 const Tab = createBottomTabNavigator();
@@ -127,7 +128,7 @@ const Home = (props) => {
       width: 300,
       height: 45,
       padding: 7,
-      borderRadius: 5,
+      borderRadius: 7,
     },
     textTitleNewProduct: {
       fontSize: 20
@@ -191,6 +192,11 @@ const Home = (props) => {
     }
   }
 
+  //modal search
+  const [showModalSearch, setShowModalSearch] = useState(false);
+  const openSearch = () => {
+    setShowModalSearch(true);
+  }
 
   //function 
   const splitArrayIntoChunks = (arr, chunkSize) => {
@@ -206,10 +212,12 @@ const Home = (props) => {
       <View style={styles.container}>
 
         <View style={styles.viewHeader}>
-          <View style={styles.viewSearch}>
-            <Icon name="search" size={25} color="#000" style={styles.iconSearch} />
-            <TextInput placeholder='Tìm kiếm' style={styles.textInput} />
-          </View>
+          <TouchableOpacity onPress={openSearch}>
+            <View style={styles.viewSearch}>
+              <Icon name="search" size={25} color="#000" style={styles.iconSearch} />
+              <TextInput placeholder='Tìm kiếm' style={styles.textInput} editable={false} />
+            </View>
+          </TouchableOpacity>
           <TouchableOpacity onPress={openShoppingCart}>
             <Icon name="shopping-cart" size={35} color="#000" style={styles.iconShopping} />
           </TouchableOpacity>
@@ -307,22 +315,95 @@ const Home = (props) => {
           </View>
           <View style={styles.viewNewProduct}>
             <View style={styles.viewNewTitleProduct}>
-              <Text style={styles.textTitleNewProduct}>Sản Phẩm Đang Sale</Text>
-              <Text style={styles.textTitleNewProduct2} onPress={() => console.log('click view all')}>View all</Text>
+              <Text style={styles.textTitleNewProduct}>Sản Phẩm Mới</Text>
+              <Text style={styles.textTitleNewProduct2} onPress={openModalViewAll}>View all</Text>
             </View>
-            <ScrollView horizontal={true}>
-              <ItemProduct />
-              <ItemProduct />
-              <ItemProduct />
-              <ItemProduct />
-            </ScrollView>
+            <View style={{ height: 300 }}>
+              <ScrollView
+                horizontal={true}
+                refreshControl={
+                  <RefreshControl refreshing={isReaload} onRefresh={ReloadData} />
+                }
+              >
+                {ds.slice(0, 5).map((item, index) => {
+                  return (
+                    <ItemProduct
+                      key={index}
+                      name={item.name}
+                      price={item.price}
+                      image={item.image}
+                      size={item.size}
+                      type={item.type}
+                      id={item.id}
+                      openModal={() => openModal(item)}
+                      status={loginInfo.status}
+                    />
+                  );
+                })}
+              </ScrollView>
+              {/* modal show product */}
+              <MyModal
+                showModal={showModal}
+                setShowModal={setShowModal}
+                selectedItem={selectedItem}
+                status={loginInfo.status}
+              />
 
+              {/* modal show viewAll */}
+              <Modal
+                visible={showModalViewAll}
+                transparent={false}
+                animationType='slide'
+                onRequestClose={() => {
+                  setshowModalViewAll(false);
+                }}>
+                <View style={{ flex: 1 }}>
+                  <View style={{ margin: 5, flexDirection: 'row' }}>
+                    <TouchableOpacity onPress={() => setshowModalViewAll(false)}>
+                      <Icon name="arrow-left" size={24} color="#000" />
+                    </TouchableOpacity>
+                    <View style={{ alignItems: 'center', width: screenWidth - 30 }}>
+                      <Text style={{ fontSize: 20, fontWeight: 'bold' }}>Danh Sách Sản Phẩm</Text>
+                    </View>
+
+                  </View>
+                  <ScrollView
+                    style={{ marginLeft: 5, }}
+                    refreshControl={
+                      <RefreshControl refreshing={isReaload} onRefresh={ReloadData} />
+                    }
+                  >
+                    {splitArrayIntoChunks(ds, 2).map((chunk, chunkIndex) => {
+                      return (
+                        <View key={chunkIndex} style={{ flexDirection: 'row' }}>
+                          {chunk.map((item, index) => (
+                            <ItemProduct
+                              key={index}
+                              name={item.name}
+                              price={item.price}
+                              image={item.image}
+                              size={item.size}
+                              type={item.type}
+                              id={item.id}
+                              openModal={() => openModal(item)}
+                            />
+                          ))}
+                        </View>
+                      );
+                    })}
+
+                  </ScrollView>
+
+                </View>
+
+              </Modal>
+            </View>
           </View>
         </ScrollView>
 
-        <TouchableOpacity style={styles.floatingButton} onPress={openAddProduct}>
+        {loginInfo.status === 1 ? '' : <TouchableOpacity style={styles.floatingButton} onPress={openAddProduct}>
           <Text style={styles.buttonText}>+</Text>
-        </TouchableOpacity>
+        </TouchableOpacity>}
         {/* modal add product for administration */}
         <ModalAddProduct
           showModalAddProduct={showModalAddProduct}
@@ -333,6 +414,8 @@ const Home = (props) => {
           showModalShoppingCart={showModalShoppingCart}
           setshowModalShoppingCart={setshowModalShoppingCart}
         />
+        <ModalSearch showModalSearch={showModalSearch}
+          setShowModalSearch={setShowModalSearch} />
       </View>
     );
   };

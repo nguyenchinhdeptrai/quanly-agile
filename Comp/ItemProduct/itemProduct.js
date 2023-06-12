@@ -62,7 +62,7 @@ const ItemProduct = ({ item, name, openModal, price, size, image, status, id,typ
                 <Text>${price}</Text>
                 <Text>Size:{size}</Text>
             </View>
-            {status === 0 ? <View style={styles.viewButtonProduct}>
+            {status === 1 ? <View style={styles.viewButtonProduct}>
                 <TouchableOpacity style={styles.button}>
                     <Text style={styles.textButton}>Add</Text>
                 </TouchableOpacity>
