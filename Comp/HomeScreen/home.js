@@ -200,12 +200,6 @@ const Home = (props) => {
     }
     return chunks;
   }
-  //array 
-  const [myArray, setMyArray] = useState([]);
-  const addItemToArray = (item) => {
-    setMyArray([...myArray, item]);
-  };
-
   //function home
   const FunctionHome = () => {
     return (
@@ -248,6 +242,7 @@ const Home = (props) => {
                       type={item.type}
                       id={item.id}
                       openModal={() => openModal(item)}
+                      status={loginInfo.status}
                     />
                   );
                 })}
@@ -257,8 +252,7 @@ const Home = (props) => {
                 showModal={showModal}
                 setShowModal={setShowModal}
                 selectedItem={selectedItem}
-                addItemToArray={addItemToArray}
-                myArray={myArray}
+                status={loginInfo.status}
               />
 
               {/* modal show viewAll */}

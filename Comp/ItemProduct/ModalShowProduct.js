@@ -1,15 +1,11 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { StyleSheet, Text, View, Modal, TouchableOpacity } from 'react-native';
 import ShowProduct from './ShowProduct';
 import Icon from 'react-native-vector-icons/FontAwesome';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
-const MyModal = ({ showModal, setShowModal, selectedItem, addItemToArray, myArray }) => {
-  const [newItem, setNewItem] = useState('');
+const MyModal = ({ showModal, setShowModal, selectedItem, status }) => {
 
-  const handleAddItem = () => {
-    addItemToArray(newItem);
-    setNewItem('');
-  };
 
   return (
     <Modal
@@ -20,16 +16,15 @@ const MyModal = ({ showModal, setShowModal, selectedItem, addItemToArray, myArra
         setShowModal(false);
       }}
     >
-      <View style={{ flex: 1 }}>
-        <View style={{ flex: 5 }}>
-          <ShowProduct myArray={myArray} addItemToArray={addItemToArray} nav={selectedItem} />
+      <View style={styles.container}>
+        <View style={styles.contentContainer}>
+          <ShowProduct nav={selectedItem} status={status}/>
         </View>
-        <View style={{ flex: 1 }}>
+
+        <View style={styles.closeButtonContainer}>
           <TouchableOpacity onPress={() => setShowModal(false)}>
-            <View style={styles.buttonClosedModal}>
-              <View style={styles.circle}>
-                <Icon name="times" size={20} color="white" />
-              </View>
+            <View style={styles.circle}>
+              <Icon name="times" size={20} color="white" />
             </View>
           </TouchableOpacity>
         </View>
@@ -41,15 +36,22 @@ const MyModal = ({ showModal, setShowModal, selectedItem, addItemToArray, myArra
 export default MyModal;
 
 const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+  },
+  contentContainer: {
+    flex: 5,
+  },
+  closeButtonContainer: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
   circle: {
     width: 50,
     height: 50,
     borderRadius: 40,
     backgroundColor: 'gray',
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  buttonClosedModal: {
     justifyContent: 'center',
     alignItems: 'center',
   },
