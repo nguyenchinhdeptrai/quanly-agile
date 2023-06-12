@@ -76,13 +76,7 @@ const ModalSearch = ({ showModalSearch, setShowModalSearch }) => {
 
                 </View>
 
-                <View style={styles.closeButtonContainer}>
-                    <TouchableOpacity onPress={() => setShowModalSearch(false)}>
-                        <View style={styles.circle}>
-                            <Icon name="times" size={20} color="white" />
-                        </View>
-                    </TouchableOpacity>
-                </View>
+               
             </View>
         </Modal>
     )
