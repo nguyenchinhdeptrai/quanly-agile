@@ -56,14 +56,13 @@ const Home = (props) => {
     }
   };
   // load data and get widh screen window
+
   React.useEffect(() => {
     const getScreenWidth = () => {
       const { width } = Dimensions.get('window');
       setScreenWidth(width);
     };
-
     getScreenWidth();
-
     const unsubscribe = props.navigation.addListener('focus', () => {
       getData();
       GetListProduct();
@@ -73,6 +72,7 @@ const Home = (props) => {
       unsubscribe();
     };
   }, [props.navigation]);
+
   //closed the app when user click on button back in mobie
   React.useEffect(() => {
     const backAction = () => {
@@ -356,7 +356,8 @@ const Home = (props) => {
                 animationType='slide'
                 onRequestClose={() => {
                   setshowModalViewAll(false);
-                }}>
+                }}
+                statusAccount={loginInfo.status}>
                 <View style={{ flex: 1 }}>
                   <View style={{ margin: 5, flexDirection: 'row' }}>
                     <TouchableOpacity onPress={() => setshowModalViewAll(false)}>
@@ -386,8 +387,10 @@ const Home = (props) => {
                               type={item.type}
                               id={item.id}
                               openModal={() => openModal(item)}
+                              status={loginInfo.status}
                             />
                           ))}
+
                         </View>
                       );
                     })}

@@ -82,16 +82,6 @@ const ShowProduct = (props) => {
                         />
                     </TouchableOpacity>
                 </View>
-                {props.status === 1 ?
-                    <View style={{ flexDirection: 'row' }}>
-                        <TouchableOpacity>
-                            <Text>Sửa sản phẩm</Text>
-                        </TouchableOpacity>
-                        <TouchableOpacity>
-                            <Text>Xóa sản phẩm</Text>
-                        </TouchableOpacity>
-                    </View>
-                    : ''}
             </View>
         </View>
     )

@@ -1,11 +1,13 @@
-import { StyleSheet, Text, View, Modal, TouchableOpacity, Image, Alert, ScrollView } from 'react-native'
+import { StyleSheet, Text, View, Modal, TouchableOpacity, Image, Alert, ScrollView, ActivityIndicator } from 'react-native'
 import React, { useState, useEffect } from 'react'
 import Icon from 'react-native-vector-icons/FontAwesome';
 
 const ModalShoppingCart = ({ showModalShoppingCart, setshowModalShoppingCart }) => {
   const url_product = 'https://64662883228bd07b355d62c5.mockapi.io/product';
   const [ds, setDs] = useState([]);
-
+  const [sumProduct, setSumProduct] = useState(0);
+  //status render
+  const [getListProductCalled, setGetListProductCalled] = useState(false);
   const getListProduct = async () => {
     let uriApi = "https://64662883228bd07b355d62c5.mockapi.io/product";
     try {
@@ -13,10 +15,29 @@ const ModalShoppingCart = ({ showModalShoppingCart, setshowModalShoppingCart }) 
       const json = await response.json();
       const filteredList = json.filter(item => item.status === 1);
       setDs(filteredList);
+      tinhTong(filteredList);
     } catch (error) {
       console.error(error);
     }
-  }
+  };
+
+  const tinhTong = (list) => {
+    let sum = 0;
+    list.forEach(item => {
+      sum += Number(item.price);
+    });
+
+    setSumProduct(sum); // Cập nhật giá trị tổng vào biến state
+    console.log(sum);
+  };
+
+  React.useEffect(() => {
+    if (sumProduct === 0 && !getListProductCalled) {
+      getListProduct();
+      setGetListProductCalled(true);
+    }
+  }, [sumProduct, getListProductCalled]);
+
   const removeFavorite = (name, price, image, type, size, id) => {
 
     let objProduct = {
@@ -37,7 +58,6 @@ const ModalShoppingCart = ({ showModalShoppingCart, setshowModalShoppingCart }) 
       body: JSON.stringify(objProduct),
     })
       .then((res) => {
-        console.log(res); // In ra đối tượng Response
         if (res.status === 200) {
           return res.json(); // Phân tích cú pháp phản hồi thành đối tượng JSON
         } else {
@@ -47,14 +67,47 @@ const ModalShoppingCart = ({ showModalShoppingCart, setshowModalShoppingCart }) 
       .then((data) => {
         console.log(data); // In ra đối tượng JSON
         alert('Xóa thành công');
+        getListProduct();
       })
       .catch((err) => {
         console.log(err);
       });
   };
-  useEffect(() => {
-    getListProduct();
-  }, []);
+
+
+  const toggleSelectAll = async () => {
+    try {
+      const updatedDs = ds.map((item) => ({
+        ...item,
+        status: 0,
+      }));
+
+      const putRequests = updatedDs.map(async (item) => {
+        const response = await fetch(`${url_product}/${item.id}`, {
+          method: 'PUT',
+          headers: {
+            Accept: 'application/json',
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(item),
+        });
+
+        if (response.status !== 200) {
+          throw new Error(`Lỗi: ${response.status} - ${response.statusText}`);
+        }
+      });
+
+      await Promise.all(putRequests);
+
+      console.log('Thanh toán thành công');
+      alert('Thanh toán thành công');
+      getListProduct();
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+
 
 
   return (
@@ -110,8 +163,26 @@ const ModalShoppingCart = ({ showModalShoppingCart, setshowModalShoppingCart }) 
         </View>
 
         <View style={styles.buttonContainer}>
-          <TouchableOpacity style={styles.button} onPress={getListProduct}>
-            <Text style={styles.buttonText}>Checkout   387.00</Text>
+          <TouchableOpacity style={styles.button} onPress={() => {
+            Alert.alert(
+              'Thanh toán',
+              'Bạn có muốn thanh toán giỏ hàng này không',
+              [
+                {
+                  text: 'Không',
+                  style: 'cancel',
+                },
+                {
+                  text: 'Có',
+                  onPress: () => {
+                    toggleSelectAll();
+                  },
+                },
+              ],
+              { cancelable: false }
+            );
+          }}>
+            <Text style={styles.buttonText}>Thanh toán {sumProduct} đ</Text>
           </TouchableOpacity>
         </View>
       </View>
