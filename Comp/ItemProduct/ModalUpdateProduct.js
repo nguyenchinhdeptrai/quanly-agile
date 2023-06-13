@@ -54,52 +54,53 @@ const ModalUpdateProduct = ({ showModalUpdate, setShowModalUpdate, name, image, 
         setSizeProduct(size);
     }
     //function add product in db
-    const addProduct = () => {
+    const updateProduct = () => {
         if (img_source === null) {
-            alert('Phải có ảnh');
-            return;
+          alert('Phải có ảnh');
+          return;
         }
         if (sizeProduct === '') {
-            alert('Phải có kích thước');
-            return;
+          alert('Phải có kích thước');
+          return;
         }
         if (value === null) {
-            alert('Phải có loại sp');
-            return;
+          alert('Phải có loại sp');
+          return;
         }
+      
         let objProduct = {
-            name: nameProduct,
-            price: priceProduct,
-            image: img_source,
-            type: value,
-            size: sizeProduct,
-            status: 0,
+          name: nameProduct,
+          price: priceProduct,
+          image: img_source,
+          type: value,
+          size: sizeProduct,
+          status: 0,
         };
-        fetch(url_product, {
-            method: 'POST',
-            headers: {
-                Accept: 'application/json',
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify(objProduct),
+      
+        fetch(`${url_product}/${id}`, {
+          method: 'PUT',
+          headers: {
+            Accept: 'application/json',
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(objProduct),
         })
-            .then((res) => {
-                console.log(res); // In ra đối tượng Response
-                if (res.status === 201) {
-                    return res.json(); // Phân tích cú pháp phản hồi thành đối tượng JSON
-                } else {
-                    throw new Error(`Lỗi: ${res.status} - ${res.statusText}`); // Thông báo lỗi chi tiết
-                }
-            })
-            .then((data) => {
-                console.log(data); // In ra đối tượng JSON
-                alert('Thêm Thành Công');
-            })
-            .catch((err) => {
-                console.log(err);
-            });
-
-    };
+          .then((res) => {
+            if (res.status === 200) {
+              return res.json(); // Phân tích cú pháp phản hồi thành đối tượng JSON
+            } else {
+              throw new Error(`Lỗi: ${res.status} - ${res.statusText}`); // Thông báo lỗi chi tiết
+            }
+          })
+          .then((data) => {
+            console.log(data); // In ra đối tượng JSON
+            alert('Cập nhật thành công');
+          })
+          .catch((err) => {
+            console.log(err);
+          });
+      };
+      
 
 
     return (
@@ -178,8 +179,8 @@ const ModalUpdateProduct = ({ showModalUpdate, setShowModalUpdate, name, image, 
                         </View>
                     </View>
                     <View style={{ margin: 20, }}>
-                        <TouchableOpacity style={styles.btnAddProduct} onPress={addProduct}>
-                            <Text>Thêm Sản Phẩm</Text>
+                        <TouchableOpacity style={styles.btnAddProduct} onPress={updateProduct}>
+                            <Text>Sửa Sản Phẩm</Text>
                         </TouchableOpacity>
                     </View>
                 </View>
