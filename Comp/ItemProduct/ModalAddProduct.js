@@ -87,7 +87,6 @@ const ModalAddProduct = ({ showModalAddProduct, setShowModalAddProduct }) => {
       body: JSON.stringify(objProduct),
     })
       .then((res) => {
-        console.log(res); // In ra đối tượng Response
         if (res.status === 201) {
           return res.json(); // Phân tích cú pháp phản hồi thành đối tượng JSON
         } else {
@@ -97,6 +96,7 @@ const ModalAddProduct = ({ showModalAddProduct, setShowModalAddProduct }) => {
       .then((data) => {
         console.log(data); // In ra đối tượng JSON
         alert('Thêm Thành Công');
+        setShowModalAddProduct(false);
       })
       .catch((err) => {
         console.log(err);

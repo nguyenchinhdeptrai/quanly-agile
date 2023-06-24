@@ -126,7 +126,7 @@ const ModalShoppingCart = ({ showModalShoppingCart, setshowModalShoppingCart }) 
         </View>
 
         <View style={{ height: 500 }}>
-          <ScrollView>
+          {ds == '' ? <Text style={{ color: 'red', margin: 15 }}>Gio hàng của bạn đang trống</Text> : <ScrollView>
             {ds.map((item) => (
               <View key={item.id} style={styles.view1}>
                 <Image source={{ uri: item.image }} style={styles.img} />
@@ -159,7 +159,7 @@ const ModalShoppingCart = ({ showModalShoppingCart, setshowModalShoppingCart }) 
                 </View>
               </View>
             ))}
-          </ScrollView>
+          </ScrollView>}
         </View>
 
         <View style={styles.buttonContainer}>

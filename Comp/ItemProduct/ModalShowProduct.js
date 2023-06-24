@@ -18,7 +18,9 @@ const MyModal = ({ showModal, setShowModal, selectedItem, status }) => {
     >
       <View style={styles.container}>
         <View style={styles.contentContainer}>
-          <ShowProduct nav={selectedItem} status={status}/>
+
+        <ShowProduct nav={selectedItem} status={status} />
+
         </View>
 
         <View style={styles.closeButtonContainer}>
