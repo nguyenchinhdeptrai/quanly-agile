@@ -43,7 +43,7 @@ const ShowProduct = (props) => {
             })
             .then((data) => {
                 console.log(data); // In ra đối tượng JSON
-                alert('Thêm vào danh sách yêu thích thành công');
+                alert('Thêm vào giỏ hàng thành công');
             })
             .catch((err) => {
                 console.log(err);
@@ -54,7 +54,6 @@ const ShowProduct = (props) => {
 
     return (
         <View style={styles.container}>
-            <Text>status: {props.status}</Text>
             <View style={styles.viewImg}>
                 <Image source={{ uri: props.nav.image }} style={styles.img} />
             </View>

@@ -3,7 +3,7 @@ import React, { useState } from 'react'
 import Icon from 'react-native-vector-icons/FontAwesome';
 import { Alert } from 'react-native';
 import ModalUpdateProductSS from './ModalUpdateProduct';
-const ItemProduct = ({ item, name, openModal, price, size, image, status, id,type }) => {
+const ItemProduct = ({ item, name, openModal, price, size, image, status, id, type, selected }) => {
     const [showModalUpdate, setShowModalUpdate] = useState(false);
     const openModalUpdate = () => {
         setShowModalUpdate(true);
@@ -54,6 +54,7 @@ const ItemProduct = ({ item, name, openModal, price, size, image, status, id,typ
     return (
 
         <View style={styles.container}>
+
             <TouchableOpacity onPress={openModal}>
                 <Image source={{ uri: image }} style={styles.img} />
             </TouchableOpacity>
@@ -78,13 +79,15 @@ const ItemProduct = ({ item, name, openModal, price, size, image, status, id,typ
                 </TouchableOpacity>
             </View>}
             <ModalUpdateProductSS showModalUpdate={showModalUpdate}
-                setShowModalUpdate={setShowModalUpdate} 
+                setShowModalUpdate={setShowModalUpdate}
                 name={name}
                 image={image}
                 price={price}
                 size={size}
                 type={type}
                 id={id} />
+
+
         </View>
     )
 }

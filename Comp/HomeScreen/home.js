@@ -16,8 +16,6 @@ const Tab = createBottomTabNavigator();
 const Home = (props) => {
   const [loginInfo, setloginInfo] = useState('');
   const [screenWidth, setScreenWidth] = useState(null);
-  // list data 
-  const [data, setData] = useState([]);
   //list data
   const [ds, setds] = useState([]);
   //status
@@ -183,13 +181,15 @@ const Home = (props) => {
   //item list new 
   const [showModal, setShowModal] = useState(false);
   const [selectedItem, setSelectedItem] = useState('');
-
+  const [selectedItemId, setSelectedItemId] = useState(null);
   const openModal = (item) => {
     setSelectedItem(item);
     setShowModal(true);
     if (showModalViewAll === true) {
       setshowModalViewAll(false);
     }
+    setSelectedItemId(item.id);
+    console.log(selectedItemId);
   }
 
   //modal search
@@ -251,68 +251,70 @@ const Home = (props) => {
                       id={item.id}
                       openModal={() => openModal(item)}
                       status={loginInfo.status}
+                      selected={item.id}
                     />
                   );
                 })}
               </ScrollView>
               {/* modal show product */}
-              <MyModal
-                showModal={showModal}
-                setShowModal={setShowModal}
-                selectedItem={selectedItem}
-                status={loginInfo.status}
-              />
 
-              {/* modal show viewAll */}
-              <Modal
-                visible={showModalViewAll}
-                transparent={false}
-                animationType='slide'
-                onRequestClose={() => {
-                  setshowModalViewAll(false);
-                }}>
-                <View style={{ flex: 1 }}>
-                  <View style={{ margin: 5, flexDirection: 'row' }}>
-                    <TouchableOpacity onPress={() => setshowModalViewAll(false)}>
-                      <Icon name="arrow-left" size={24} color="#000" />
-                    </TouchableOpacity>
-                    <View style={{ alignItems: 'center', width: screenWidth - 30 }}>
-                      <Text style={{ fontSize: 20, fontWeight: 'bold' }}>Danh Sách Sản Phẩm</Text>
-                    </View>
-
-                  </View>
-                  <ScrollView
-                    style={{ marginLeft: 5, }}
-                    refreshControl={
-                      <RefreshControl refreshing={isReaload} onRefresh={ReloadData} />
-                    }
-                  >
-                    {splitArrayIntoChunks(ds, 2).map((chunk, chunkIndex) => {
-                      return (
-                        <View key={chunkIndex} style={{ flexDirection: 'row' }}>
-                          {chunk.map((item, index) => (
-                            <ItemProduct
-                              key={index}
-                              name={item.name}
-                              price={item.price}
-                              image={item.image}
-                              size={item.size}
-                              type={item.type}
-                              id={item.id}
-                              openModal={() => openModal(item)}
-                            />
-                          ))}
-                        </View>
-                      );
-                    })}
-
-                  </ScrollView>
-
-                </View>
-
-              </Modal>
             </View>
           </View>
+          <MyModal
+            showModal={showModal}
+            setShowModal={setShowModal}
+            selectedItem={selectedItem}
+            status={loginInfo.status}
+          />
+
+          {/* modal show viewAll */}
+          <Modal
+            visible={showModalViewAll}
+            transparent={false}
+            animationType='slide'
+            onRequestClose={() => {
+              setshowModalViewAll(false);
+            }}>
+            <View style={{ flex: 1 }}>
+              <View style={{ margin: 5, flexDirection: 'row' }}>
+                <TouchableOpacity onPress={() => setshowModalViewAll(false)}>
+                  <Icon name="arrow-left" size={24} color="#000" />
+                </TouchableOpacity>
+                <View style={{ alignItems: 'center', width: screenWidth - 30 }}>
+                  <Text style={{ fontSize: 20, fontWeight: 'bold' }}>Danh Sách Sản Phẩm</Text>
+                </View>
+
+              </View>
+              <ScrollView
+                style={{ marginLeft: 5, }}
+                refreshControl={
+                  <RefreshControl refreshing={isReaload} onRefresh={ReloadData} />
+                }
+              >
+                {splitArrayIntoChunks(ds, 2).map((chunk, chunkIndex) => {
+                  return (
+                    <View key={chunkIndex} style={{ flexDirection: 'row' }}>
+                      {chunk.map((item, index) => (
+                        <ItemProduct
+                          key={index}
+                          name={item.name}
+                          price={item.price}
+                          image={item.image}
+                          size={item.size}
+                          type={item.type}
+                          id={item.id}
+                          openModal={() => openModal(item)}
+                        />
+                      ))}
+                    </View>
+                  );
+                })}
+
+              </ScrollView>
+
+            </View>
+
+          </Modal>
           <View style={styles.viewNewProduct}>
             <View style={styles.viewNewTitleProduct}>
               <Text style={styles.textTitleNewProduct}>Sản Phẩm Mới</Text>
